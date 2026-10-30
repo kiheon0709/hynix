@@ -1,48 +1,134 @@
-# hynix — SK하이닉스 AI 해커톤 2차 예선용 Codex 하네스
+# hynix — SK하이닉스 AI 해커톤 2차 예선 당일 메모
 
-개인 준비물. 과제 해답·예상 문제 없음. **Codex와 일하는 순서, 담당자 AI에게 물을 질문, 기록 양식, 환경 점검 도구**만 있다.
-스킬 4개(interview · verify · decision-log · wrapup), AGENTS.md 1개, 템플릿 3개, 스크립트 2개. 표준 라이브러리만 사용.
+> 시험 중 이 파일을 왼쪽 탐색기에서 열어두고 본다. 위에서부터 중요한 순서.
 
-## 시험 당일 (과제 작업 폴더 터미널에서)
+---
+
+## 0. 외울 것 (이것만 머리에)
+```
+git clone https://github.com/kiheon0709/hynix
+```
+
+## 1. 시작 5분 (10:00 "과제 시작" 누른 직후)
+터미널에 순서대로:
 ```bash
 git clone https://github.com/kiheon0709/hynix
 bash hynix/install.sh
 codex
 ```
-- `/model` → Sol 6.1, **reasoning high** (기본이 low)
-- `/status` 로 AGENTS.md 읽혔는지 확인
-- 스킬은 자동 인식 안 됨(시험 환경 폴더 읽기 전용) → `docs/prompts.md` 의 "SKILL.md 읽고 진행" 프롬프트로 호출
-- 긴 프롬프트는 에디터에서 `docs/prompts.md` 열어 복사 → 터미널 ⌘V (한글 직접 입력 깨짐)
-
-## 구성
+Codex 안에서:
 ```
-AGENTS.md              Codex가 자동으로 읽는 작업 규칙 (상황·절대규칙·순서·보고형식·스택)
-templates/TASK.md      과제 계약서: 사실/가정/열린질문/경계값/완료조건
-templates/DECISIONS.md 결정 기록 (서술형 6문항 재료)
-templates/VERIFY.md    검증 결과: "돌린 것만"
-docs/interview.md      담당자 AI 질문 순서 5단계 (맥락→입출력→규칙→경계값→완료기준)
-docs/prompts.md        단계별 복붙 프롬프트 S0~S8
-docs/qa-prep.md        서술형 예상 질문 20개 + 답변 골격 + 당일 메모
-docs/timeline.md       180분 운영표, 막혔을 때 규칙
-scripts/preflight.py   환경 점검 (파이썬 버전·패키지·시간대·CSV 인코딩·git)
-tools/profile_csv.py   CSV 첫 점검 (행/열/결측/고유키 후보), 통째로 안 읽음
-.agents/skills/        interview / verify / decision-log / wrapup
-install.sh             위 파일을 작업 폴더에 복사 (기존 파일 보존)
+/model        → GPT-6.1-Sol 선택, reasoning **high** (기본이 low라 꼭 바꿔야 함)
+/status       → Agents.md 줄에 AGENTS.md 보이면 OK
+```
+그다음 `hynix/docs/prompts.md` 열어서 **S0 복사 → 터미널 ⌘V**.
+
+## 2. 절대 하지 말 것 (실격·감점)
+- 전체화면 해제, 다른 탭·창 이동, 외부 브라우저
+- git push, 파일 외부 전송, 캡처
+- 서술형에서 AI·복붙 (본인이 직접 타이핑)
+- Codex가 `curl`·`wget`·`pip install` 하려고 하면 **Esc** (네트워크 막혀 있어서 실패하고 시간만 날림)
+- Codex 업데이트 권유 뜨면 무시
+- `/goal`, 서브에이전트, `$team` 같은 자동 루프 — 토큰 먹고 통제 안 됨
+- 혼잣말, 자리 이탈, 폰 각도 바꾸기, 키보드 밖으로 손 자주 나가기
+- ⌘+Shift 조합 단축키 (1차 때 부정행위 경고 떴음)
+
+## 3. 시간표 (경과 기준, 화면 타이머로)
+| 경과 | 할 일 | 프롬프트 |
+|---|---|---|
+| 0~5 | clone · install · /model high · /status | S0 |
+| 5~20 | README·자료 보고 TASK.md 초안 | S1 |
+| 20~35 | **담당자 인터뷰** (docs/interview.md 순서로 내가 직접 질문) → 반영 | S2 |
+| 35~45 | 계획, 완료조건↔테스트 매핑 | S3 (`/plan`) |
+| 45~70 | 최소 버전(E2E v0) → 첫 커밋 | S4 |
+| 70~140 | 완료조건 하나씩: 테스트→구현→커밋. 숫자 의심되면 검산 | S5, S6 |
+| **140** | **기능 동결** | |
+| 140~160 | 전체 테스트, VERIFY.md, 약점 3개, DECISIONS.md 보완 | S7 |
+| 160~168 | wrapup, 제출물 확인 | S8 |
+| 168~172 | **docs/qa-prep.md 당일 메모 5줄 채우고 머리에 넣기** | |
+| 172~175 | **제출** (14:00 하드컷, 늦어도 178) | |
+| 제출 후 | 서술형 6문항 × 5분. 결론 1줄 → 이유 2줄 → 근거 1줄 | |
+
+막히면: 한 문제 15분 넘기면 범위 줄이고 가정 적고 넘어간다. AI가 같은 실패 2번이면 직접 읽고 직접 고친다.
+
+## 4. 담당자 인터뷰 (오른쪽 DMs, 내가 직접 타이핑)
+과제는 일부러 덜 주고 담당자한테 물어서 채우는 게 시험이다. 대화 로그가 채점된다.
+- "뭘 만들면 되나요" ✗ → "정원 초과면 누가 우선인가요" ✓. 업무를 짚어서 묻는다
+- 순서: 누가 쓰나 → 지금 어떻게 하나 → 결과물 형태 → 입력·출력 → 우선순위·예외 → 경계값(같으면? 동점? 빈 값? 중복?) → 완료 기준
+- 답 듣고 다음 질문 바꾼다. 체크리스트지 대본이 아니다
+- 답은 내 말로 요약해서 S2로 Codex에 넘긴다
+- 가정이 3개 쌓이면 멈추고 묻는다. 구현 중에도 몇 번이든 다시 묻는다
+- 전체 목록: `docs/interview.md`
+
+## 5. Codex 조작법 (Claude Code와 다른 점)
+| 할 일 | 방법 |
+|---|---|
+| 긴 프롬프트 | 터미널 한글 직접 입력 깨짐 → 에디터에서 `docs/prompts.md` 열어 복사 → 터미널 **⌘V** |
+| 줄바꿈 | **Ctrl+J** (Shift+Enter 안 됨). 한 줄로 보내도 됨 |
+| 승인 창 | `y` 한 번 / **`p`** 같은 패턴 다시 안 물음 / `Esc` 거절. `python3`·`cp`·`git` 은 p |
+| 모델·추론 | `/model` → Sol 6.1, 계획·검증은 high, 단순 수정은 medium |
+| 계획 모드 | `/plan` 또는 Shift+Tab |
+| 컨텍스트 | `/status` 로 확인. 80% 넘으면 `/compact` |
+| 리뷰 | `/review` (커밋 안 된 변경 리뷰) |
+| 세션 | 하나만 쓴다. 꼭 새로 열면 "TASK.md·DECISIONS.md 읽고 이어서"로 시작 |
+| 스킬 | 자동 인식 안 됨 → `hynix/.agents/skills/<이름>/SKILL.md 읽고 진행해` (prompts.md에 이미 들어 있음) |
+
+## 6. 환경 사실 (체험에서 확인)
+- 작업 폴더 `~`. 파일: README.md, uploads/ (과제 자료 여기 있을 듯)
+- Python 3, pandas·numpy 있음. fastapi·pytest 없음. pip 안 됨 → **표준 라이브러리 + pandas**
+- 시스템 시간대 **UTC** → "오늘"은 과제 자료 기준, 날짜 비교 timezone 명시
+- 외부 네트워크 없음. 깃허브 clone만 됨
+- 브라우저 미리보기: 왼쪽 지구본, 포트 3000. 화면 필요하면 `http.server` 나 단일 HTML, CDN 없이
+- 컨텍스트 258K. 하네스 전부 읽어도 20K. 큰 CSV 통째 읽기만 조심 (`tools/profile_csv.py` 로 요약)
+- MCP 설정은 비워둔다
+
+## 7. 스택 정하기
+담당자가 원하는 **결과물 형태**가 기준. Codex와 S3에서 상의한다.
+- 표·CSV·배정 결과 → Python 스크립트 하나. 프론트 없음 (가능성 제일 높음)
+- 직원이 보는 화면 → 단일 HTML + `http.server`. 포트 3000
+- React·DB·로그인·디자인 스킬 안 한다. 3시간이다
+
+## 8. 서술형 대비 (제출 후 30분, AI 없음)
+- 재료는 `DECISIONS.md`(결정·AI가 틀린 것·숨은 조건·약점) + `VERIFY.md`(테스트·검산) + `TASK.md`
+- 예상 질문 20개와 답 골격: `docs/qa-prep.md`. 체험 문제는 "핵심 동작과 확인한 방법 설명" 이었음
+- 제출 직전 qa-prep.md 맨 아래 당일 메모 5줄 채운다: 핵심 문제 / 담당자에게 물은 것 3개 / AI가 틀린 것 / 내가 직접 한 것 / 약점 3개
+- 제출 후엔 화면 못 보고 복붙 안 됨 → 머리에 넣고 들어간다
+
+## 9. 하네스가 방해되면
+```
+AGENTS.md를 _harness_off/ 로 옮겨줘. 삭제는 하지 말고. 이후로는 그 규칙 무시하고 순정으로 진행해.
+```
+→ `/compact` 또는 Codex 재시작. DECISIONS.md에 "OO분 하네스 제거, 이유" 한 줄. 15분 안에 결정한다.
+
+## 10. 아침 체크 (09:00~09:40)
+- [ ] 09:40 운영팀 추가 메일 확인
+- [ ] 외부 모니터 분리하고 책상에서 치우기(천으로 덮기). 블루투스 키보드·마우스 금지, 내장 키보드
+- [ ] 폰 거치 1.5m, 얼굴·양손·키보드·화면 다 보이게. 폰 Wi-Fi + 충전기
+- [ ] 노트북 충전기, 절전·화면보호기 끄기, 알림 끄기, 카톡·슬랙·디스코드 종료
+- [ ] 실물 신분증 (주민등록증·운전면허증·여권)
+- [ ] 방 온도 미리 맞추기, 화장실, 물 (시험 중 반입 불가), 투명 문·창 가리기
+- [ ] 화면 글자 크기 키우기 (몸 숙이면 자세 경고)
+- [ ] **09:40까지 접속**, 10:00 정각에 내가 "과제 시작" 누른다 (별도 공지 없음)
+
+---
+
+## 파일 구성
+```
+AGENTS.md              Codex가 자동으로 읽는 작업 규칙
+templates/TASK.md      과제 계약서 (사실/가정/열린질문/경계값/완료조건)
+templates/DECISIONS.md 결정 기록 → 서술형 재료
+templates/VERIFY.md    검증 결과, "돌린 것만"
+docs/prompts.md        S0~S9 복붙 프롬프트 + 체험에서 확인된 환경 메모
+docs/interview.md      담당자 질문 18개, 5단계
+docs/qa-prep.md        서술형 예상 20문항 + 답 골격 + 당일 메모란
+docs/timeline.md       180분 운영표 상세
+scripts/preflight.py   환경 점검 (install 때 자동 실행)
+tools/profile_csv.py   CSV 요약 (통째로 안 읽음)
+.agents/skills/        interview / verify / decision-log / wrapup — 경로로 읽힘
+install.sh             위 파일을 작업 폴더에 복사
 ```
 
-## 원칙
-1. 계약(TASK.md) 먼저, 코드는 나중
-2. 담당자에게 업무를 짚어서 묻는다 — 숨은 조건은 물어야 나온다
-3. AI는 틀린다는 전제. 돌린 것만 말하고, 손으로 한 번 검산한다
-4. 결정은 그때그때 한 줄 기록 — 서술형은 AI 없이 답한다
-5. 140분 기능 동결
+## 참고한 공개 자료 (MIT, 문장은 다시 씀)
+hamjoon2003/sk-hynix-2nd-harness · frank081999-glitch/cofa-harness · Malrangbbobbi/hynix-harness-kit · OpenAI Codex best practices
 
-## 참고한 공개 자료
-구조와 사상은 아래 공개 저장소(MIT)를 참고했고 문장은 다시 썼다.
-- hamjoon2003/sk-hynix-2nd-harness — 계약서·결정기록·"검사 0건은 통과 아님"
-- frank081999-glitch/cofa-harness — 얇은 규칙·담당자 인터뷰·CSV 점검
-- Malrangbbobbi/hynix-harness-kit — 단계별 프롬프트·180분 시간표
-- OpenAI Codex best practices (developers.openai.com/codex/learn/best-practices)
-
-## 라이선스
-MIT
+MIT License
