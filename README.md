@@ -9,9 +9,10 @@ git clone https://github.com/kiheon0709/hynix
 bash hynix/install.sh
 codex
 ```
-- `/model` → Sol 6.1, reasoning high
-- `/status` 로 AGENTS.md 읽혔는지, `/skills` 로 스킬 4개 보이는지 확인
-- 첫 프롬프트: `docs/prompts.md` S0부터 순서대로
+- `/model` → Sol 6.1, **reasoning high** (기본이 low)
+- `/status` 로 AGENTS.md 읽혔는지 확인
+- 스킬은 자동 인식 안 됨(시험 환경 폴더 읽기 전용) → `docs/prompts.md` 의 "SKILL.md 읽고 진행" 프롬프트로 호출
+- 긴 프롬프트는 에디터에서 `docs/prompts.md` 열어 복사 → 터미널 ⌘V (한글 직접 입력 깨짐)
 
 ## 구성
 ```
