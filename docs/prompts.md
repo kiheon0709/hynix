@@ -47,12 +47,22 @@ hynix/.agents/skills/verify/SKILL.md 읽고 그대로 진행해. 방금 결과�
 
 ## S7. 동결 후 (140분)
 ```
-기능 추가 금지. 전체 테스트 돌리고 실패 있으면 고쳐. VERIFY.md 채우고 알려진 약점 3개를 솔직하게 적어. hynix/.agents/skills/decision-log/SKILL.md 기준으로 DECISIONS.md 빠진 결정 보완.
+기능 추가 금지. 전체 테스트 돌리고 실패 있으면 고쳐. VERIFY.md를 A(자동검증·테스트명·명령) / B(담당자 답에 기댄 가정) / C(미구현·미검증)로 나눠 채우고 알려진 약점 3개를 솔직하게 적어. hynix/.agents/skills/decision-log/SKILL.md 기준으로 DECISIONS.md 보완하되 2.구조·데이터흐름 3.엣지케이스 4.반례와 수정 5.AI 협업 기록 섹션이 비어 있으면 실제 있었던 것만으로 채워. 과제가 요구한 문서(AI_COLLABORATION.md 등)가 있으면 그것과 일관되게.
 ```
 
 ## S8. 제출 전 (= wrapup 스킬)
 ```
 hynix/.agents/skills/wrapup/SKILL.md 읽고 그대로 진행해.
+```
+
+## S1-1. 과제가 휴가·식사 쪽이면 (S1 직후)
+```
+hynix/docs/domain-hints.md 읽고, 과제 자료와 비교해서 이미 정해진 것 / 담당자에게 물어야 할 것을 나눠 TASK.md 열린질문에 넣어. 추측해서 규칙을 정하지 마.
+```
+
+## S8-1. 반례 찾기 (동결 전 시간 남을 때, 서술형 Q5 재료)
+```
+지금 구현이 틀리거나 나빠질 입력을 3개 만들어 봐: 자정·날짜 넘김, 누락/중복/상충 행, 경계값. 각각 실제로 돌려서 결과 보여주고, 문제 있으면 고치기 전에 원인부터 말해. DECISIONS.md "4. 반례와 수정"에 기록.
 ```
 
 ## S9. 하네스가 방해될 때 (삭제 아님, 이동)
